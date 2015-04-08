@@ -7,7 +7,7 @@ version = "1.0.0"
 def siteUrl = 'https://github.com/fredericojssilva/EasyPortal'
 def gitUrl = 'https://github.com/fredericojssilva/EasyPortal.git'
 
-group = "bintray-fredericojssilva-maven"
+group = "net.fredericosilva"
 android {
     compileSdkVersion 21
     buildToolsVersion "21.1.2"
