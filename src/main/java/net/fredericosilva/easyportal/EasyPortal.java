@@ -2,6 +2,7 @@ package net.fredericosilva.easyportal;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.v4.app.Fragment;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -45,18 +46,51 @@ public class EasyPortal {
 
     }
 
+    public static void startActivity(Fragment fragment, Class target){
+        startActivity(fragment, fragment.getActivity(), target);
+    }
+    public static void startActivity(android.app.Fragment fragment, Class target){
+        startActivity(fragment, fragment.getActivity(), target);
+    }
+    public static void startActivity(Activity activity, Class target){
+        startActivity(activity,activity,target);
+    }
+    public static void startActivityForResult(Fragment fragment, Class target, int resultCode){
+        startActivityForResult(fragment, fragment.getActivity(), target, resultCode);
+    }
+    public static void startActivityForResult(android.app.Fragment fragment, Class target, int resultCode){
+        startActivityForResult(fragment, fragment.getActivity(), target, resultCode);
+    }
+    public static void startActivityForResult(Activity activity, Class target, int resultCode){
+        startActivityForResult(activity,activity,target, resultCode);
+    }
 
-    public static void startActivity(Activity _activity, Class target) {
+    private static void startActivity(Object source, Activity _activity, Class target) {
+        Intent extras = generateIntentExtras(source);
 
+        Intent i = new Intent(_activity, target);
+        i.putExtras(extras);
+        _activity.startActivity(i);
+    }
+
+    private static void startActivityForResult(Object source, Activity _activity, Class target, int resultCode) {
+        Intent extras = generateIntentExtras(source);
+
+        Intent i = new Intent(_activity, target);
+        i.putExtras(extras);
+        _activity.startActivityForResult(i,resultCode);
+    }
+
+    private static Intent generateIntentExtras(Object source){
         Intent extras = new Intent();
-        for (Field field : _activity.getClass().getDeclaredFields()) {
+        for (Field field : source.getClass().getDeclaredFields()) {
             String name = field.getName();
 
             Annotation annotation = field.getAnnotation(IPortalOut.class);
 
             if (annotation instanceof IPortalOut) {
                 try {
-                    extras.putExtra(name, (java.io.Serializable) field.get(_activity));
+                    extras.putExtra(name, (java.io.Serializable) field.get(source));
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
@@ -64,11 +98,10 @@ public class EasyPortal {
 
         }
 
-        Intent i = new Intent(_activity, target);
-        i.putExtras(extras);
-
-        _activity.startActivity(i);
+        return extras;
     }
+
+
 
 
 }
