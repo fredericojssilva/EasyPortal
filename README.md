@@ -15,14 +15,14 @@ class FirstActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 		...
-
 		string1="balobilo";
 		string2="pussara";
 		int1=3;
     }
 
 	public void onButtonClick(){
-		EasyPortal.startActivity(this, SecondActivity.class);	
+		EasyPortal.startActivity(this, SecondActivity.class);
+		//or EasyPortal.startActivityForResult(this, SecondActivity.class, 3);	
 	}
 }
 ```
@@ -32,8 +32,8 @@ class SecondActivity extends Activity {
 
     @IPortalIn
     public String string1;
-    @IPortalIn
-    public String string2;
+    @IPortalIn(name="string2")
+    public String cuteString;
     @IPortalIn
     public int int1;
 
@@ -51,8 +51,7 @@ class SecondActivity extends Activity {
 **Gradle:**
 
 ```
-compile 'net.fredericosilva:easyportal:1.0.0'
-
+compile 'net.fredericosilva:easyportal:1.0.1'
 ```
 ##License
 ```
